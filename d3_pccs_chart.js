@@ -59,19 +59,44 @@ class PCCSd3Chart{
     
     const arc = d3.arc()
     .innerRadius(width/4)
-    .outerRadius(width/2.1)
+    .outerRadius(width/2.1);
+
+    const arc2 = d3.arc()
+    .innerRadius(width/4)
+    .outerRadius( (d,i) => {
+      if( i%3 == 0){
+        return width/1.5;
+      }
+      else{
+        return width/2.1;
+      }
+    });
   
     this.svg.append("g")
     .attr("stroke", "white")
     .selectAll(".tone-"+name)
     .data(arcs)
     .join("path")
-    .attr("class", "pccs-color")
+    .attr("class", "pccs-color tone-"+name)
     .attr("id", d => "color-"+d.data.hue_tone)
     .attr("fill", d => d.data.rgb16)
     .attr("d", arc)
-    .attr("transform", "rotate(-90)")
-    .attr("transform", `translate(${posX},${posY}) ` + `rotate(${rot})`);
+    .attr("transform", (d,i) => {
+        return `translate(${posX},${posY}) ` + `rotate(${rot}) ` + "scale(1.0,1.0)";  
+    });
+
+  
+    // d3.selectAll(".tone-"+name)
+    // .data(arcs)
+    // .transition()
+    // .duration(2000)
+    // .attr("d", arc2);
+    
+    // d3.select("#color-"+name)
+    // .data(arcs)
+    // .transition()
+    // .duration(2000)
+    // .attr("d", arc2);
 
     this.svg.append("text")
     .text(name)
@@ -79,4 +104,28 @@ class PCCSd3Chart{
     .style("dominant-baseline", "central")
     .attr("transform", `translate(${posX},${posY})`); 
   }
+
+  // TODO: make this
+  // set new colorData
+  changeTonePieSize(colorData, name){
+    const arcs = pie(colorData);
+    const arc2 = d3.arc()
+
+    .innerRadius(width/4)
+    .outerRadius( (d,i) => {
+      if( i%3 == 0){
+        return width/1.5;
+      }
+      else{
+        return width/2.1;
+      }
+    });
+
+    d3.selectAll(".tone-"+name)
+    .data(arcs)
+    .transition()
+    .duration(2000)
+    .attr("d", arc2);
+  }
+
 }
