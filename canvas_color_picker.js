@@ -2,13 +2,13 @@ const CANVAS_W = 500
 const CANVAS_H = 500
 
 class CanvasColorPicker{
-  constructor(){
+  constructor(colorManager){
     this.canvas = document.getElementById("img-canvas");
     this.canvas.width = CANVAS_W;
     this.canvas.height = CANVAS_W;
     this.context = this.canvas.getContext('2d');
 
-    this.colorManager = new ColorManager();
+    this.colorManager = colorManager;
     this.initImageDragDropLoader();
   }
 

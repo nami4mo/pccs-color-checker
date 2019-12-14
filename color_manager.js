@@ -106,5 +106,4 @@ class ColorManager{
 
     return [L, a, b];
   }
-
 }

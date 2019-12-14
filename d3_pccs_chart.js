@@ -77,8 +77,6 @@ class PCCSd3Chart{
     .text(name)
     .style("text-anchor", "middle")
     .style("dominant-baseline", "central")
-    .attr("transform", `translate(${posX},${posY})`);
-    
+    .attr("transform", `translate(${posX},${posY})`); 
   }
-
 }

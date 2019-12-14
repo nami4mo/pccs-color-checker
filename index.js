@@ -1,7 +1,8 @@
 class CanvasD3Controller{
   constructor(){
+    this.colorManager = new ColorManager();
     this.pccsD3 = new PCCSd3Chart();
-    this.canvasColorPicker = new CanvasColorPicker();
+    this.canvasColorPicker = new CanvasColorPicker(this.colorManager);
 
     this.canvasColorPicker.loadImageFromFilename('./sample.jpg');
     this.canvasColorPicker.initPicker(this.canvasOnClick.bind(this));
