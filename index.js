@@ -1,6 +1,7 @@
 const main = () => {
   const canvasColorPicker = new CanvasColorPicker();
-  canvasColorPicker.loadImage('./sample.jpg')
+  const pccsD3 = new PCCSd3Chart();
+  canvasColorPicker.loadImage('./sample.jpg');
 }
 
 window.onload = main;
