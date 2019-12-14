@@ -1,8 +1,14 @@
-html{
+body{
     font-family: 'Maven Pro', sans-serif;
 }
 
 #pccs-svg{
     width: 500px;
     height: 500px;
+}
+
+#img-canvas{
+    width: 500px;
+    height: 500px;
+    background-color: #f0f0f0;
 }

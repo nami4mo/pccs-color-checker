@@ -1,28 +1,37 @@
+const CANVAS_W = 500
+const CANVAS_H = 500
+
 class CanvasColorPicker{
   constructor(){
-    // this.initPicker();
+    this.canvas = document.getElementById("img-canvas");
+    this.context = this.canvas.getContext('2d');
     this.colorManager = new ColorManager();
+    this.initImageLoader();
   }
 
   loadImage(image_name){
-    const canvas = document.getElementById("img-canvas");
-    const context = canvas.getContext('2d');
-   
+    this.canvas.width = CANVAS_W;
+    this.canvas.height = CANVAS_W;
     const img = new Image();
     img.src = image_name;
    
     img.onload = () => {
-      context.drawImage(img, 0, 0, 400, 300);
+      const ratioWH = img.width / img.height;
+      if( ratioWH > 1.0 ){
+        this.context.drawImage(img, 0, (CANVAS_H-CANVAS_W/ratioWH)/2, CANVAS_W, CANVAS_W / ratioWH);
+      }
+      else{
+        this.context.drawImage(img, 0, 0, CANVAS_H * ratioWH, CANVAS_H);
+      }  
     }
   }
 
   initPicker(callback){
-    const canvas = document.getElementById("img-canvas");
-    const context = canvas.getContext('2d');
-    canvas.onclick = (e) => {
+    this.canvas.onclick = (e) => {
       const x = e.offsetX;
       const y = e.offsetY;  
-      const imagedata = context.getImageData(x, y, 1, 1);
+      console.log('xy',x,y);
+      const imagedata = this.context.getImageData(x, y, 1, 1);
       const [r,g,b,a, ...other] = imagedata.data;
 
       // const nearestColor = this.colorManager.getNearestColorRGB(r,g,b,a);
@@ -30,7 +39,25 @@ class CanvasColorPicker{
       const nearestColor = this.colorManager.getNearestColorLab(r,g,b,a);
       console.log('Lab', nearestColor);
       console.log(nearestColor.hue_tone);
+      console.log(r,g,b);
       callback(nearestColor.hue_tone)
     }
+  }
+
+  initImageLoader(){
+    this.canvas.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.dataTransfer.dropEffect = 'copy';
+    });
+    this.canvas.addEventListener('drop', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('preview').src = e.target.result;
+      }
+      reader.readAsDataURL(e.dataTransfer.files[0]);
+    });
   }
 }
