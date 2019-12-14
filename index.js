@@ -1,7 +1,20 @@
-const main = () => {
-  const canvasColorPicker = new CanvasColorPicker();
-  const pccsD3 = new PCCSd3Chart();
-  canvasColorPicker.loadImage('./sample.jpg');
+class CanvasD3Controller{
+  constructor(){
+    this.pccsD3 = new PCCSd3Chart();
+    this.canvasColorPicker = new CanvasColorPicker();
+
+    this.canvasColorPicker.loadImage('./sample.jpg');
+    this.canvasColorPicker.initPicker(this.canvasOnClick.bind(this));
+  }
+
+  // click an image on canvas => get the nearest color Hue-Tone
+  canvasOnClick(hueTone){
+    this.pccsD3.highlightColor(hueTone);
+  }
+
 }
 
+const main = () => {
+  const canvasD3Controller = new CanvasD3Controller();
+}
 window.onload = main;

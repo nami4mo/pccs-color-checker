@@ -21,6 +21,7 @@ class PCCSd3Chart{
     this.showTonePie(this.colorInfoListDict.ltg, 'ltg', 100, 200);
     this.showTonePie(this.colorInfoListDict.g, 'g', 100, 300);
     this.showTonePie(this.colorInfoListDict.dkg, 'dkg', 100, 400);    
+
   }
 
   loadAndShowColor(){
@@ -35,6 +36,11 @@ class PCCSd3Chart{
     }).then((data) => {
       this.showAllTonePie();
     });
+  }
+
+  highlightColor(colorName){
+    d3.select("#color-"+colorName)
+    .attr("stroke", "black");
   }
 
   // thanks!
@@ -61,10 +67,18 @@ class PCCSd3Chart{
     .data(arcs)
     .join("path")
     .attr("class", "pccs-color")
+    .attr("id", d => "color-"+d.data.hue_tone)
     .attr("fill", d => d.data.rgb16)
     .attr("d", arc)
     .attr("transform", "rotate(-90)")
     .attr("transform", `translate(${posX},${posY}) ` + `rotate(${rot})`);
+
+    this.svg.append("text")
+    .text(name)
+    .style("text-anchor", "middle")
+    .style("dominant-baseline", "central")
+    .attr("transform", `translate(${posX},${posY})`);
+    
   }
 
 }

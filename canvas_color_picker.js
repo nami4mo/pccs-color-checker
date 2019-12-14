@@ -1,6 +1,6 @@
 class CanvasColorPicker{
   constructor(){
-    this.initPicker();
+    // this.initPicker();
     this.colorManager = new ColorManager();
   }
 
@@ -16,7 +16,7 @@ class CanvasColorPicker{
     }
   }
 
-  initPicker(){
+  initPicker(callback){
     const canvas = document.getElementById("img-canvas");
     const context = canvas.getContext('2d');
     canvas.onclick = (e) => {
@@ -29,6 +29,8 @@ class CanvasColorPicker{
       // const nearestColor = this.colorManager.getNearestColorXYZ(r,g,b,a);
       const nearestColor = this.colorManager.getNearestColorLab(r,g,b,a);
       console.log('Lab', nearestColor);
+      console.log(nearestColor.hue_tone);
+      callback(nearestColor.hue_tone)
     }
   }
 }
