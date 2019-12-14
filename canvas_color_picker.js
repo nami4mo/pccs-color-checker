@@ -48,7 +48,17 @@ class CanvasColorPicker{
       }
       colorCountDict[nearestColor] += 1;
     }
-    console.log(colorCountDict);
+
+    const colorCountList = [];
+    for( const key in colorCountDict ){
+      colorCountList.push( {hue_tone: key, count: colorCountDict[key] } );
+    }
+    colorCountList.sort(function(a,b){
+      if(a.count > b.count) return -1;
+      if(a.count < b.count) return 1;
+      return 0;
+    });
+    console.log(colorCountList);
   }
 
   initPicker(callback){
