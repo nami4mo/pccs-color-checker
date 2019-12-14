@@ -4,33 +4,37 @@ const CANVAS_H = 500
 class CanvasColorPicker{
   constructor(){
     this.canvas = document.getElementById("img-canvas");
-    this.context = this.canvas.getContext('2d');
-    this.colorManager = new ColorManager();
-    this.initImageLoader();
-  }
-
-  loadImage(image_name){
     this.canvas.width = CANVAS_W;
     this.canvas.height = CANVAS_W;
+    this.context = this.canvas.getContext('2d');
+
+    this.colorManager = new ColorManager();
+    this.initImageDragDropLoader();
+  }
+
+  loadImageFromFilename(imageName){
     const img = new Image();
-    img.src = image_name;
-   
+    img.src = imageName;
     img.onload = () => {
-      const ratioWH = img.width / img.height;
-      if( ratioWH > 1.0 ){
-        this.context.drawImage(img, 0, (CANVAS_H-CANVAS_W/ratioWH)/2, CANVAS_W, CANVAS_W / ratioWH);
-      }
-      else{
-        this.context.drawImage(img, 0, 0, CANVAS_H * ratioWH, CANVAS_H);
-      }  
+      this.loadImage(img);
     }
+  }
+
+  loadImage(img){
+    this.context.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    const ratioWH = img.width / img.height;
+    if( ratioWH > 1.0 ){
+      this.context.drawImage(img, 0, (CANVAS_H-CANVAS_W/ratioWH)/2, CANVAS_W, CANVAS_W / ratioWH);
+    }
+    else{
+      this.context.drawImage(img, 0, 0, CANVAS_H * ratioWH, CANVAS_H);
+    }  
   }
 
   initPicker(callback){
     this.canvas.onclick = (e) => {
       const x = e.offsetX;
       const y = e.offsetY;  
-      console.log('xy',x,y);
       const imagedata = this.context.getImageData(x, y, 1, 1);
       const [r,g,b,a, ...other] = imagedata.data;
 
@@ -44,18 +48,28 @@ class CanvasColorPicker{
     }
   }
 
-  initImageLoader(){
-    this.canvas.addEventListener('dragover', function (e) {
+  initImageDragDropLoader(){
+    this.canvas.addEventListener('dragover', (e) => {
       e.preventDefault();
-      e.stopPropagation();
       e.dataTransfer.dropEffect = 'copy';
+      this.canvas.classList.add('drag');
     });
-    this.canvas.addEventListener('drop', function (e) {
+
+    this.canvas.addEventListener('dragleave', (e) => {
+      this.canvas.classList.remove('drag');
+    });
+
+    this.canvas.addEventListener('drop', (e) => {
+      this.canvas.classList.remove('drag');
       e.stopPropagation();
       e.preventDefault();
+      const image = new Image();
       const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById('preview').src = e.target.result;
+      reader.onload = (event) => {
+        image.onload = () => {
+          this.loadImage(image);
+        }
+        image.src = event.target.result;
       }
       reader.readAsDataURL(e.dataTransfer.files[0]);
     });
