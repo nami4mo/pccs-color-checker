@@ -27,7 +27,7 @@ class CanvasColorPicker{
       this.context.drawImage(img, 0, (CANVAS_H-CANVAS_W/ratioWH)/2, CANVAS_W, CANVAS_W / ratioWH);
     }
     else{
-      this.context.drawImage(img, 0, 0, CANVAS_H * ratioWH, CANVAS_H);
+      this.context.drawImage(img, (CANVAS_W-CANVAS_H*ratioWH)/2, 0, CANVAS_H * ratioWH, CANVAS_H);
     }  
   }
 
