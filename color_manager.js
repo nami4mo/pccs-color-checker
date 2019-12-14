@@ -1,6 +1,10 @@
 class ColorManager{
   constructor(){
-    this.colorInfoList;
+    this.colorInfoList = [];
+    this.colorInfoListR = [];
+    this.colorInfoListG = [];
+    this.colorInfoListB = [];
+    this.colorInfoListWB = [];
     this.loadColorInfo();
   }
 
@@ -42,17 +46,30 @@ class ColorManager{
     return currNearestColorInfo;
   }
 
+  // TODO: make rapid algorithm (change data structure)
   // CIE76 (delta E76)
   // 0 <= r,g,b <= 255 
   getNearestColorLab(r,g,b){
     r /= 255;
     g /= 255;
     b /= 255;
+    const [x, y, z] = this.RGBtoXYZ(r, g, b);
+    const [Lab_L, Lab_a, Lab_b] = this.XYZtoLab(x, y, z);
+
+    let selectedColorInfoList;
+    if( r >= g && r >= b ){
+      selectedColorInfoList = this.colorInfoListR;
+    }
+    else if( g >= r && g >= b ){
+      selectedColorInfoList = this.colorInfoListG;
+    }
+    else{
+      selectedColorInfoList = this.colorInfoListB;
+    }
+
     let currMinDist2 = 99999;
     let currNearestColorInfo;
-    for( const color of this.colorInfoList ){
-      const [x, y, z] = this.RGBtoXYZ(r, g, b);
-      const [Lab_L, Lab_a, Lab_b] = this.XYZtoLab(x, y, z);
+    for( const color of selectedColorInfoList.concat(this.colorInfoListWB) ){
       const dist2 = (Lab_L-color.Lab_L)**2 + (Lab_a-color.Lab_a)**2 + (Lab_b-color.Lab_b)**2;
       if( dist2 < currMinDist2 ){
         currMinDist2 = dist2;
@@ -69,12 +86,26 @@ class ColorManager{
       const b = Number(data.b)/255;
       const [x, y, z] = this.RGBtoXYZ(r, g, b);
       const [Lab_L, Lab_a, Lab_b] = this.XYZtoLab(x, y, z);
-      return {
+      const colorDict = {
         hue_tone: data.hue_tone, tone: data.tone_short,
         r, g, b, x, y, z, Lab_L, Lab_a, Lab_b
       };
+      if( r == g && r == b ){
+        this.colorInfoListWB.push(colorDict);
+      }
+      else if( r >= g && r >= b ){
+        this.colorInfoListR.push(colorDict);
+      }
+      else if( g >= r && g >= b ){
+        this.colorInfoListG.push(colorDict);
+      }
+      else{
+        this.colorInfoListB.push(colorDict);
+      }
+      return colorDict;
     }).then((data) => {
       console.log(data);
+      // really need ?
       this.colorInfoList = data;
     });
   }

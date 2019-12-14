@@ -25,10 +25,30 @@ class CanvasColorPicker{
     const ratioWH = img.width / img.height;
     if( ratioWH > 1.0 ){
       this.context.drawImage(img, 0, (CANVAS_H-CANVAS_W/ratioWH)/2, CANVAS_W, CANVAS_W / ratioWH);
+      this.checkColorCount(0, (CANVAS_H-CANVAS_W/ratioWH)/2, CANVAS_W, CANVAS_W / ratioWH);
     }
     else{
       this.context.drawImage(img, (CANVAS_W-CANVAS_H*ratioWH)/2, 0, CANVAS_H * ratioWH, CANVAS_H);
-    }  
+      this.checkColorCount((CANVAS_W-CANVAS_H*ratioWH)/2, 0, CANVAS_H * ratioWH, CANVAS_H);
+    } 
+  }
+
+  checkColorCount(sX, sY, width, height){
+    sX = parseInt(sX);
+    sY = parseInt(sY);
+    width = parseInt(width);
+    height = parseInt(height);
+    const imagedata = this.context.getImageData(sX, sY, width, height);
+    const colorCountDict = {};
+    for( let i = 0 ; i < width*height ; i++ ){
+      const [r,g,b] = imagedata.data.slice(i*4,i*4+3);
+      const nearestColor = this.colorManager.getNearestColorLab(r,g,b).hue_tone;
+      if( !(nearestColor in colorCountDict) ){
+        colorCountDict[nearestColor] = 0;
+      }
+      colorCountDict[nearestColor] += 1;
+    }
+    console.log(colorCountDict);
   }
 
   initPicker(callback){
@@ -40,7 +60,7 @@ class CanvasColorPicker{
 
       // const nearestColor = this.colorManager.getNearestColorRGB(r,g,b,a);
       // const nearestColor = this.colorManager.getNearestColorXYZ(r,g,b,a);
-      const nearestColor = this.colorManager.getNearestColorLab(r,g,b,a);
+      const nearestColor = this.colorManager.getNearestColorLab(r,g,b);
       console.log('Lab', nearestColor);
       console.log(nearestColor.hue_tone);
       console.log(r,g,b);
