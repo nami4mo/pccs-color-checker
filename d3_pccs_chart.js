@@ -1,3 +1,7 @@
+const SVG_WH = 360
+const MAX_R = 45;
+
+
 class PCCSd3Chart{
   constructor(colorManager){
     this.colorManager = colorManager;
@@ -7,21 +11,23 @@ class PCCSd3Chart{
   }
 
   showAllTonePie(){
-    this.showTonePie(this.colorInfoListDict.v, 'v', 400, 250);
+    const rowX = [SVG_WH*7/8, SVG_WH*5/8, SVG_WH*3/8, SVG_WH/8];
 
-    this.showTonePie(this.colorInfoListDict.b, 'b', 300, 150);
-    this.showTonePie(this.colorInfoListDict.s, 's', 300, 250);
-    this.showTonePie(this.colorInfoListDict.dp, 'dp', 300, 350);
+    this.showTonePie(this.colorInfoListDict.v, 'v', rowX[0], SVG_WH/2);
 
-    this.showTonePie(this.colorInfoListDict.ltP, 'ltP', 200, 100);
-    this.showTonePie(this.colorInfoListDict.sf, 'sf', 200, 200);
-    this.showTonePie(this.colorInfoListDict.d, 'd', 200, 300);
-    this.showTonePie(this.colorInfoListDict.dk, 'dk', 200, 400);
+    this.showTonePie(this.colorInfoListDict.b, 'b', rowX[1], SVG_WH*1.5/6);
+    this.showTonePie(this.colorInfoListDict.s, 's', rowX[1], SVG_WH*3/6);
+    this.showTonePie(this.colorInfoListDict.dp, 'dp', rowX[1], SVG_WH*4.5/6);
 
-    this.showTonePie(this.colorInfoListDict.pP, 'pP', 100, 100);
-    this.showTonePie(this.colorInfoListDict.ltg, 'ltg', 100, 200);
-    this.showTonePie(this.colorInfoListDict.g, 'g', 100, 300);
-    this.showTonePie(this.colorInfoListDict.dkg, 'dkg', 100, 400);    
+    this.showTonePie(this.colorInfoListDict.ltP, 'ltP', rowX[2], SVG_WH/8);
+    this.showTonePie(this.colorInfoListDict.sf, 'sf', rowX[2], SVG_WH*3/8);
+    this.showTonePie(this.colorInfoListDict.d, 'd', rowX[2], SVG_WH*5/8);
+    this.showTonePie(this.colorInfoListDict.dk, 'dk', rowX[2], SVG_WH*7/8);
+
+    this.showTonePie(this.colorInfoListDict.pP, 'pP', rowX[3], SVG_WH/8);
+    this.showTonePie(this.colorInfoListDict.ltg, 'ltg', rowX[3], SVG_WH*3/8);
+    this.showTonePie(this.colorInfoListDict.g, 'g', rowX[3], SVG_WH*5/8);
+    this.showTonePie(this.colorInfoListDict.dkg, 'dkg', rowX[3], SVG_WH*7/8);    
 
   }
 
@@ -47,8 +53,6 @@ class PCCSd3Chart{
   // thanks!
   // https://observablehq.com/@d3/donut-chart
   showTonePie(colorData, name, posX, posY){
-    const width = 100;
-    const height = 100;
     const rot = -90 - (360/colorData.length)/2;
   
     // TODO: sort by hue
@@ -59,20 +63,9 @@ class PCCSd3Chart{
     const arcs = pie(colorData);
     
     const arc = d3.arc()
-    .innerRadius(width/4)
-    .outerRadius(width/2.1);
+    .innerRadius(MAX_R/2)
+    .outerRadius(MAX_R-2);
 
-    // const arc2 = d3.arc()
-    // .innerRadius(width/4)
-    // .outerRadius( (d,i) => {
-    //   if( i%3 == 0){
-    //     return width/1.5;
-    //   }
-    //   else{
-    //     return width/2.1;
-    //   }
-    // });
-  
     this.svg.append("g")
     .attr("stroke", "white")
     .selectAll(".tone-"+name)
@@ -85,19 +78,6 @@ class PCCSd3Chart{
     .attr("transform", (d,i) => {
         return `translate(${posX},${posY}) ` + `rotate(${rot}) ` + "scale(1.0,1.0)";  
     });
-
-  
-    // d3.selectAll(".tone-"+name)
-    // .data(arcs)
-    // .transition()
-    // .duration(2000)
-    // .attr("d", arc2);
-    
-    // d3.select("#color-"+name)
-    // .data(arcs)
-    // .transition()
-    // .duration(2000)
-    // .attr("d", arc2);
 
     this.svg.append("text")
     .text(name)
@@ -116,12 +96,18 @@ class PCCSd3Chart{
     const arcs = pie(colorData);
 
     const arc2 = d3.arc()
-    .innerRadius(100/4)
-    .outerRadius( (d,i) => {
-      if( d.data.count/10 > 300 ){
-        return 300;
-      }
-      return d.data.count/10;
+    .innerRadius(MAX_R/5)
+    .outerRadius( (d) => {
+      const r = Math.sqrt(d.data.count) * 4*MAX_R/5 + MAX_R/5 + 1;
+      // if( r > MAX_R/5 ){
+      //   return r + ;
+      // }
+      // else{
+      //   return MAX_R/5 + 2;
+      // }
+      // const r = Math.sqrt(d.data.count) * MAX_R ;
+      // if(r>10)console.log(r,d.data);
+      return r;
     });
 
     d3.selectAll(".tone-"+toneName)
@@ -133,7 +119,7 @@ class PCCSd3Chart{
 
   changeAllTonePieSize(eachToneColorCountData){
     for( const key in eachToneColorCountData){
-      console.log(eachToneColorCountData[key], key);
+      // console.log(eachToneColorCountData[key], key);
       this.changeTonePieSize(eachToneColorCountData[key], key);
     }
   }

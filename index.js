@@ -14,16 +14,28 @@ class CanvasD3Controller{
     this.pccsD3.highlightColor(hueTone);
   }
 
+  // ignore Gy colors
   canvasBtnClickCallback(colorsCountDict){
     const colorNameListDict = this.colorManager.getToneToColorNameListDict();
-    // console.log(colorNameListDict);
     const eachToneColorCountData = {};
+    let maxCount = 1;
     for( const key in colorNameListDict){
       eachToneColorCountData[key] = [];
       for( const colorName of colorNameListDict[key] ){
-        eachToneColorCountData[key].push({value:1, count:colorsCountDict[colorName]});
+        const count = colorsCountDict[colorName];
+        if( count > maxCount && colorName.indexOf('Gy') < 0 ){
+          maxCount = count;
+        }
+        eachToneColorCountData[key].push({value:1, count, colorName});
       }
     }
+
+    for( const key in eachToneColorCountData){
+      for( let colorName of eachToneColorCountData[key] ){
+        colorName.count /= maxCount;
+      }
+    }
+
     console.log(eachToneColorCountData);
     this.pccsD3.changeAllTonePieSize(eachToneColorCountData);
   }

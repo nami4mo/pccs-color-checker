@@ -25,20 +25,34 @@ body{
     margin: 15px 15px;
 }
 
+#svg-div{
+    margin: 0px auto;
+    text-align: center;
+}
+
+#canvas-div{
+    text-align: center;
+}
+
 #pccs-svg{
-    width: 450px;
-    height: 450px;
-    margin: 0 25px;
+    width: 360px;
+    height: 360px;
+    margin: 0;
 }
 
 #img-canvas{
-    width: 500px;
-    height: 500px;
+    width: 350px;
+    height: 350px;
     border: dotted 3px #ccc;
-    /* background-color: #f0f0f0; */
 }
 
 #img-canvas.drag {
-    /* background-color: #eff; */
     opacity: 0.5;
+}
+
+@media screen and (max-width:500px) {
+    #contents-div{
+        display: block;
+        margin: 15px 0px;
+    }
 }

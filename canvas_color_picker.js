@@ -1,5 +1,5 @@
-const CANVAS_W = 500
-const CANVAS_H = 500
+const CANVAS_W = 350
+const CANVAS_H = 350
 
 class CanvasColorPicker{
   constructor(colorManager){
