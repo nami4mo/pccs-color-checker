@@ -80,7 +80,7 @@ class ColorManager{
   }
 
   loadColorInfo(){
-    d3.csv("./color_info.csv", (data,i) => {
+    d3.csv("./colors.csv", (data,i) => {
       const r = Number(data.r)/255;
       const g = Number(data.g)/255;
       const b = Number(data.b)/255;

@@ -32,7 +32,7 @@ class PCCSd3Chart{
   }
 
   loadAndShowColor(){
-    d3.csv("./color_info.csv", (data,i) => {
+    d3.csv("./colors.csv", (data,i) => {
       if( !(data.tone_short in this.colorInfoListDict) ){
         this.colorInfoListDict[data.tone_short] = [];
       }
