@@ -15,6 +15,7 @@ class CanvasColorPicker{
 
     this.colorManager = colorManager;
     this.initImageDragDropLoader();
+    this.initImageFileLoader();
   }
 
   loadImageFromFilename(imageName){
@@ -52,11 +53,18 @@ class CanvasColorPicker{
     for( let i = 0 ; i < width*height ; i++ ){
       const [r,g,b] = imagedata.data.slice(i*4,i*4+3);
       const nearestColor = this.colorManager.getNearestColorLab(r,g,b).hue_tone;
-      // if( !(nearestColor in this.colorCountDict) ){
-      //   this.colorCountDict[nearestColor] = 0;
-      // }
+
+      //// if change colors into each PCCS color
+      // const c = this.colorManager.getNearestColorLab(r,g,b);
+      // imagedata.data[i*4] = c.r*255;
+      // imagedata.data[i*4+1] = c.g*255;
+      // imagedata.data[i*4+2] = c.b*255;
+
       this.colorCountDict[nearestColor] += 1;
     }
+
+    //// if change colors into each PCCS color
+    // this.context.putImageData(imagedata,10,10);
 
     this.colorCountList = [];
     for( const key in this.colorCountDict ){
@@ -118,6 +126,20 @@ class CanvasColorPicker{
         image.src = event.target.result;
       }
       reader.readAsDataURL(e.dataTransfer.files[0]);
+    });
+  }
+
+  initImageFileLoader(){
+    document.getElementById('image-file-input').addEventListener('change', (e) => {
+      const image = new Image();
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        image.onload = () => {
+          this.loadImage(image);
+        }
+        image.src = event.target.result;
+      }
+      reader.readAsDataURL( e.srcElement.files[0]);
     });
   }
 }

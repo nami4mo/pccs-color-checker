@@ -26,12 +26,16 @@ body{
 }
 
 #svg-div{
-    margin: 0px auto;
+    margin: 0px 15px;
     text-align: center;
 }
 
 #canvas-div{
     text-align: center;
+}
+
+#btn-div{
+    margin: 15px 10px 5px 10px;
 }
 
 #pccs-svg{
@@ -49,6 +53,20 @@ body{
 #img-canvas.drag {
     opacity: 0.5;
 }
+
+#image-file-input{
+    display: none;
+}
+
+.image-btn {
+    background-color: #565566;
+    padding: 6px;
+    border-radius: 12px;
+    color: #fff;
+    font-family: inherit; 
+    font-size: 0.8rem;
+}
+
 
 @media screen and (max-width:500px) {
     #contents-div{
