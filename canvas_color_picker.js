@@ -7,6 +7,11 @@ class CanvasColorPicker{
     this.canvas.width = CANVAS_W;
     this.canvas.height = CANVAS_W;
     this.context = this.canvas.getContext('2d');
+    this.canvasBtn = document.getElementById("canvas-btn");
+
+    this.colorCountList = [];
+    this.colorCountDict = {};
+
 
     this.colorManager = colorManager;
     this.initImageDragDropLoader();
@@ -39,29 +44,33 @@ class CanvasColorPicker{
     width = parseInt(width);
     height = parseInt(height);
     const imagedata = this.context.getImageData(sX, sY, width, height);
-    const colorCountDict = {};
+    this.colorCountDict = {};
+    const allColorName = this.colorManager.getAllColorName();
+    for( const color of allColorName ){
+      this.colorCountDict[color] = 0;
+    }
     for( let i = 0 ; i < width*height ; i++ ){
       const [r,g,b] = imagedata.data.slice(i*4,i*4+3);
       const nearestColor = this.colorManager.getNearestColorLab(r,g,b).hue_tone;
-      if( !(nearestColor in colorCountDict) ){
-        colorCountDict[nearestColor] = 0;
-      }
-      colorCountDict[nearestColor] += 1;
+      // if( !(nearestColor in this.colorCountDict) ){
+      //   this.colorCountDict[nearestColor] = 0;
+      // }
+      this.colorCountDict[nearestColor] += 1;
     }
 
-    const colorCountList = [];
-    for( const key in colorCountDict ){
-      colorCountList.push( {hue_tone: key, count: colorCountDict[key] } );
+    this.colorCountList = [];
+    for( const key in this.colorCountDict ){
+      this.colorCountList.push( {hue_tone: key, count: this.colorCountDict[key] } );
     }
-    colorCountList.sort(function(a,b){
+    this.colorCountList.sort(function(a,b){
       if(a.count > b.count) return -1;
       if(a.count < b.count) return 1;
       return 0;
     });
-    console.log(colorCountList);
+    console.log(this.colorCountList);
   }
 
-  initPicker(callback){
+  initCanvasOnClick(callback){
     this.canvas.onclick = (e) => {
       const x = e.offsetX;
       const y = e.offsetY;  
@@ -75,6 +84,13 @@ class CanvasColorPicker{
       console.log(nearestColor.hue_tone);
       console.log(r,g,b);
       callback(nearestColor.hue_tone)
+    }
+  }
+
+  initCanvasBtnOnClick(callback){
+    this.canvasBtn.onclick = (e) => {
+      // callback(this.colorCountList);
+      callback(this.colorCountDict);
     }
   }
 

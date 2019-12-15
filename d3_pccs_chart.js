@@ -1,5 +1,6 @@
 class PCCSd3Chart{
-  constructor(){
+  constructor(colorManager){
+    this.colorManager = colorManager;
     this.svg = d3.select("svg");
     this.colorInfoListDict = {};
     this.loadAndShowColor();
@@ -61,16 +62,16 @@ class PCCSd3Chart{
     .innerRadius(width/4)
     .outerRadius(width/2.1);
 
-    const arc2 = d3.arc()
-    .innerRadius(width/4)
-    .outerRadius( (d,i) => {
-      if( i%3 == 0){
-        return width/1.5;
-      }
-      else{
-        return width/2.1;
-      }
-    });
+    // const arc2 = d3.arc()
+    // .innerRadius(width/4)
+    // .outerRadius( (d,i) => {
+    //   if( i%3 == 0){
+    //     return width/1.5;
+    //   }
+    //   else{
+    //     return width/2.1;
+    //   }
+    // });
   
     this.svg.append("g")
     .attr("stroke", "white")
@@ -106,26 +107,35 @@ class PCCSd3Chart{
   }
 
   // TODO: make this
-  // set new colorData
-  changeTonePieSize(colorData, name){
-    const arcs = pie(colorData);
-    const arc2 = d3.arc()
+  // change outerRadius calc
+  changeTonePieSize(colorData, toneName){
+    const pie = d3.pie()
+    .sort(null)
+    .value(d => d.value)
 
-    .innerRadius(width/4)
+    const arcs = pie(colorData);
+
+    const arc2 = d3.arc()
+    .innerRadius(100/4)
     .outerRadius( (d,i) => {
-      if( i%3 == 0){
-        return width/1.5;
+      if( d.data.count/10 > 300 ){
+        return 300;
       }
-      else{
-        return width/2.1;
-      }
+      return d.data.count/10;
     });
 
-    d3.selectAll(".tone-"+name)
+    d3.selectAll(".tone-"+toneName)
     .data(arcs)
     .transition()
     .duration(2000)
     .attr("d", arc2);
+  }
+
+  changeAllTonePieSize(eachToneColorCountData){
+    for( const key in eachToneColorCountData){
+      console.log(eachToneColorCountData[key], key);
+      this.changeTonePieSize(eachToneColorCountData[key], key);
+    }
   }
 
 }

@@ -137,4 +137,23 @@ class ColorManager{
 
     return [L, a, b];
   }
+
+  getAllColorName(){
+    const colorNames = [];
+    for( const color of this.colorInfoList ){
+      colorNames.push(color.hue_tone);
+    }
+    return colorNames;
+  }
+
+  getToneToColorNameListDict(){
+    const colorNamesDcit= {};
+    for( const color of this.colorInfoList ){
+      if( !(color.tone in colorNamesDcit) ){
+        colorNamesDcit[color.tone] = [];
+      }
+      colorNamesDcit[color.tone].push(color.hue_tone);
+    }
+    return colorNamesDcit;
+  }
 }
