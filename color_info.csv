@@ -155,7 +155,7 @@ DarkGrayish,dkg,dkg18,18,3PB 1.5/1.5,34,41,51,#222933
 DarkGrayish,dkg,dkg20,20,9PB 1.5/1.5,41,39,52,#292734
 DarkGrayish,dkg,dkg22,22,7P 1.5/1.5,48,37,49,#302531
 DarkGrayish,dkg,dkg24,24,6RP 2/1.5,61,46,52,#3d2e34
-Nuetral,W,W,W,,255,255,255,#ffffff
+Nuetral,White,Gy-W,W,,255,255,255,#ffffff
 Nuetral,Gy-9.5,Gy-9.5,95,N 9.5,241,241,241,#f1f1f1
 Nuetral,Gy-8.5,Gy-8.5,85,N 8.5,214,214,214,#d6d6d6
 Nuetral,Gy-7.5,Gy-7.5,75,N 7.5,187,187,187,#bbbbbb
@@ -165,5 +165,5 @@ Nuetral,Gy-4.5,Gy-4.5,45,N 4.5,109,109,109,#6d6d6d
 Nuetral,Gy-3.5,Gy-3.5,35,N 3.5,84,84,84,#545454
 Nuetral,Gy-2.5,Gy-2.5,25,N 2.5,60,60,60,#3c3c3c
 Nuetral,Gy-1.5,Gy-1.5,15,N 1.5,39,39,39,#272727
-Nuetral,B,B,B,,0,0,0,#000000
+Nuetral,Black,Gy-B,B,,0,0,0,#000000
 
