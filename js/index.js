@@ -16,6 +16,10 @@ class CanvasD3Controller{
 
   // ignore Gy colors
   canvasBtnClickCallback(colorsCountDict){
+    console.log(colorsCountDict);
+    if(Object.keys(colorsCountDict).length === 0){
+      return;
+    }
     const colorNameListDict = this.colorManager.getToneToColorNameListDict();
     const eachToneColorCountData = {};
     let maxCount = 1;
