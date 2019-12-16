@@ -38,7 +38,7 @@ class PCCSd3Chart{
       }
       this.colorInfoListDict[data.tone_short].push({
           hue_tone: data.hue_tone,rgb16: data.rgb16,
-          value: 1
+          value: 1, count:1
       });
     }).then((data) => {
       this.showAllTonePie();
@@ -46,8 +46,44 @@ class PCCSd3Chart{
   }
 
   highlightColor(colorName){
+    if( colorName.indexOf("Gy") >= 0 ){
+      return;
+    }
+
+    const arc = d3.arc()
+    .innerRadius(MAX_R/6)
+    .outerRadius(MAX_R);
+
+    const arc2 = d3.arc()
+    .innerRadius(MAX_R/2)
+    .outerRadius(MAX_R/1.5);
+
+    const arc3 = d3.arc()
+    .innerRadius(MAX_R/6)
+    .outerRadius(MAX_R);
+
+    const arc4 = d3.arc()
+    .innerRadius(MAX_R/3-3)
+    .outerRadius( (d) => {
+      const r = Math.sqrt(d.data.count) * 2*MAX_R/3 + MAX_R/3 - 2;
+      return r;
+    });
+
+
     d3.select("#color-"+colorName)
-    .attr("stroke", "black");
+    // .attr("stroke", "black")
+    .transition()
+    .duration(200)
+    .attr("d", arc)
+    .transition()
+    .duration(500)
+    .attr("d", arc2)
+    .transition()
+    .duration(200)
+    .attr("d", arc3)
+    .transition()
+    .duration(500)
+    .attr("d", arc4);
   }
 
   // thanks!
@@ -62,9 +98,18 @@ class PCCSd3Chart{
   
     const arcs = pie(colorData);
     
-    const arc = d3.arc()
-    .innerRadius(MAX_R/2)
-    .outerRadius(MAX_R-2);
+    const arc2 = d3.arc()
+    .innerRadius(MAX_R/3-3)
+    .outerRadius( (d) => {
+      const r = Math.sqrt(d.data.count) * 2*MAX_R/3 + MAX_R/3 - 2;
+      return r;
+    });
+
+    this.svg.append("text")
+    .text(name)
+    .style("text-anchor", "middle")
+    .style("dominant-baseline", "central")
+    .attr("transform", `translate(${posX},${posY})`); 
 
     this.svg.append("g")
     .attr("stroke", "white")
@@ -74,16 +119,11 @@ class PCCSd3Chart{
     .attr("class", "pccs-color tone-"+name)
     .attr("id", d => "color-"+d.data.hue_tone)
     .attr("fill", d => d.data.rgb16)
-    .attr("d", arc)
+    .attr("d", arc2)
     .attr("transform", (d,i) => {
         return `translate(${posX},${posY}) ` + `rotate(${rot}) ` + "scale(1.0,1.0)";  
     });
 
-    this.svg.append("text")
-    .text(name)
-    .style("text-anchor", "middle")
-    .style("dominant-baseline", "central")
-    .attr("transform", `translate(${posX},${posY})`); 
   }
 
   // TODO: make this
@@ -96,17 +136,9 @@ class PCCSd3Chart{
     const arcs = pie(colorData);
 
     const arc2 = d3.arc()
-    .innerRadius(MAX_R/5)
+    .innerRadius(MAX_R/3-3)
     .outerRadius( (d) => {
-      const r = Math.sqrt(d.data.count) * 4*MAX_R/5 + MAX_R/5 + 1;
-      // if( r > MAX_R/5 ){
-      //   return r + ;
-      // }
-      // else{
-      //   return MAX_R/5 + 2;
-      // }
-      // const r = Math.sqrt(d.data.count) * MAX_R ;
-      // if(r>10)console.log(r,d.data);
+      const r = Math.sqrt(d.data.count) * 2*MAX_R/3 + MAX_R/3 -2;
       return r;
     });
 
