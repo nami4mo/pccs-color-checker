@@ -12,10 +12,19 @@ class CanvasColorPicker{
     this.colorCountList = [];
     this.colorCountDict = {};
 
-
     this.colorManager = colorManager;
     this.initImageDragDropLoader();
     this.initImageFileLoader();
+
+    this.context.font = "20px 'Maven Pro'";
+    this.context.fillStyle = "#bbb";
+    // this.context.fillText("Please select an image.", 30, CANVAS_H/2.0-30);
+    // this.context.fillText(" - tap <Upload an Image>", 30, CANVAS_H/2.0);
+    // this.context.fillText(" - drag & drop an image", 30, CANVAS_H/2.0+30);
+
+    this.context.fillText("Please select an image.", 30, 40);
+    this.context.fillText(" - tap <Upload an Image>", 30, 70);
+    this.context.fillText(" - drag & drop an image", 30, 100);
   }
 
   loadImageFromFilename(imageName){
@@ -76,6 +85,9 @@ class CanvasColorPicker{
       return 0;
     });
     console.log(this.colorCountList);
+
+    // auto change graph
+    this.canvasBtn.click();
   }
 
   initCanvasOnClick(callback){
