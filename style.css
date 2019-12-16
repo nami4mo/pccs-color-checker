@@ -23,6 +23,7 @@ body{
 #contents-div{
     display: flex;
     margin: 15px 15px;
+    justify-content: center;
 }
 
 #svg-div{
@@ -30,12 +31,19 @@ body{
     text-align: center;
 }
 
+#svg-info{
+    width: 100%;
+    height: 30px;
+}
+
 #canvas-div{
     text-align: center;
 }
 
 #btn-div{
-    margin: 15px 10px 5px 10px;
+    margin: 0 0 5px 0;
+    width: 100%;
+    height:30px;
 }
 
 #pccs-svg{
@@ -47,7 +55,7 @@ body{
 #img-canvas{
     width: 350px;
     height: 350px;
-    border: dotted 3px #ccc;
+    border: dashed 3px #ccc;
 }
 
 #img-canvas.drag {
@@ -72,5 +80,15 @@ body{
     #contents-div{
         display: block;
         margin: 15px 0px;
+    }
+
+    #svg-info{
+        /* width: 100%; */
+        height: 0px;
+    }
+
+    #canvas-div{
+        text-align: center;
+        margin-top: 10px;
     }
 }
