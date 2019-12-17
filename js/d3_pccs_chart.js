@@ -98,6 +98,10 @@ class PCCSd3Chart{
   
     const arcs = pie(colorData);
     
+    const arc = d3.arc()
+    .innerRadius(MAX_R/3-3)
+    .outerRadius(MAX_R/3-2);
+
     const arc2 = d3.arc()
     .innerRadius(MAX_R/3-3)
     .outerRadius( (d) => {
@@ -119,9 +123,15 @@ class PCCSd3Chart{
     .attr("class", "pccs-color tone-"+name)
     .attr("id", d => "color-"+d.data.hue_tone)
     .attr("fill", d => d.data.rgb16)
+    .attr("d", arc)
+    .attr("transform", (d,i) => {
+      return `translate(${posX},${posY}) ` + `rotate(0) ` + "scale(1.0,1.0)";  
+    })
+    .transition()
+    .duration(750)
     .attr("d", arc2)
     .attr("transform", (d,i) => {
-        return `translate(${posX},${posY}) ` + `rotate(${rot}) ` + "scale(1.0,1.0)";  
+      return `translate(${posX},${posY}) ` + `rotate(${rot}) ` + "scale(1.0,1.0)";  
     });
 
   }
