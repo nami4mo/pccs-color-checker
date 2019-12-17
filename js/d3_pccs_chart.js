@@ -3,8 +3,7 @@ const MAX_R = 45;
 
 
 class PCCSd3Chart{
-  constructor(colorManager){
-    this.colorManager = colorManager;
+  constructor(){
     this.svg = d3.select("svg");
     this.colorInfoListDict = {};
     this.loadAndShowColor();

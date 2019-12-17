@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PCCS Color Checker</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Maven+Pro&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="./style.css">
     <script src="./js/d3.min.js"></script>
     <script src="./js/d3_pccs_chart.js"></script>
+    <script src="./js/d3_stack_bar.js"></script>
     <script src="./js/color_manager.js"></script>
     <script src="./js/canvas_color_picker.js"></script>
     <script src="./js/index.js"></script>
@@ -31,7 +32,7 @@
             <div id="btn-div">
                 <input type="file" name="file" id="image-file-input" class="inputfile" />
                 <label for="image-file-input" id="input-label" class="image-btn">Upload an Image</label>
-                <button id="canvas-btn" class="image-btn">Check Color</button>
+                <button id="canvas-btn" class="image-btn" style="display: none;">Check Color</button>
             </div>
             <canvas id="img-canvas" src="./sample.jpg"></canvas>
         </div>

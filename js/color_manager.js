@@ -87,7 +87,7 @@ class ColorManager{
       const [x, y, z] = this.RGBtoXYZ(r, g, b);
       const [Lab_L, Lab_a, Lab_b] = this.XYZtoLab(x, y, z);
       const colorDict = {
-        hue_tone: data.hue_tone, tone: data.tone_short,
+        hue_tone: data.hue_tone, tone: data.tone_short, hue: data.hue,
         r, g, b, x, y, z, Lab_L, Lab_a, Lab_b
       };
       if( r == g && r == b ){
@@ -152,7 +152,7 @@ class ColorManager{
       if( !(color.tone in colorNamesDcit) ){
         colorNamesDcit[color.tone] = [];
       }
-      colorNamesDcit[color.tone].push(color.hue_tone);
+      colorNamesDcit[color.tone].push({hue_tone: color.hue_tone, hue: color.hue, tone: color.tone});
     }
     return colorNamesDcit;
   }

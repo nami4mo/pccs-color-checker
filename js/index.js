@@ -2,6 +2,7 @@ class CanvasD3Controller{
   constructor(){
     this.colorManager = new ColorManager();
     this.pccsD3 = new PCCSd3Chart();
+    this.d3StackBar = new D3StackBar();
     this.canvasColorPicker = new CanvasColorPicker(this.colorManager);
 
     // this.canvasColorPicker.loadImageFromFilename('./sample.jpg');
@@ -21,16 +22,25 @@ class CanvasD3Controller{
       return;
     }
     const colorNameListDict = this.colorManager.getToneToColorNameListDict();
+    console.log(colorNameListDict);
     const eachToneColorCountData = {};
+    const eachHueColorCountData = {};
     let maxCount = 1;
     for( const key in colorNameListDict){
+      if( colorNameListDict[key].length < 12 ){
+        continue;
+      }
       eachToneColorCountData[key] = [];
       for( const colorName of colorNameListDict[key] ){
-        const count = colorsCountDict[colorName];
-        if( count > maxCount && colorName.indexOf('Gy') < 0 ){
+        const count = colorsCountDict[colorName.hue_tone];
+        if( count > maxCount && colorName.hue_tone.indexOf('Gy') < 0 ){
           maxCount = count;
         }
-        eachToneColorCountData[key].push({value:1, count, colorName});
+        eachToneColorCountData[key].push({value:1, count, colorName: colorName.hue_tone});
+        if( !(colorName.hue in eachHueColorCountData) ){
+          eachHueColorCountData[colorName.hue] = {};
+        }
+        eachHueColorCountData[colorName.hue][colorName.tone] = count;
       }
     }
 
@@ -40,8 +50,23 @@ class CanvasD3Controller{
       }
     }
 
+    console.log(eachHueColorCountData);
+    const eachHueColorCountDataList = [];
+    for( const hue in eachHueColorCountData){
+      const tmpDict = {};
+      tmpDict.hue = hue;
+      console.log(eachHueColorCountData[hue]);
+      for( const tone in eachHueColorCountData[hue] ){
+        tmpDict[tone] = eachHueColorCountData[hue][tone] / maxCount;
+      }
+      eachHueColorCountDataList.push(tmpDict);
+    }
+
     console.log(eachToneColorCountData);
     this.pccsD3.changeAllTonePieSize(eachToneColorCountData);
+
+    // console.log(eachHueColorCountDataList);
+    // this.d3StackBar.showStackBar(eachHueColorCountDataList);
   }
   
 
