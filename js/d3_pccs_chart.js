@@ -7,6 +7,7 @@ class PCCSd3Chart{
     this.svg = d3.select("svg");
     this.colorInfoListDict = {};
     this.loadAndShowColor();
+    this.setCopyButton();
   }
 
   showAllTonePie(){
@@ -27,7 +28,18 @@ class PCCSd3Chart{
     this.showTonePie(this.colorInfoListDict.ltg, 'ltg', rowX[3], SVG_WH*3/8);
     this.showTonePie(this.colorInfoListDict.g, 'g', rowX[3], SVG_WH*5/8);
     this.showTonePie(this.colorInfoListDict.dkg, 'dkg', rowX[3], SVG_WH*7/8);    
+  }
 
+  setCopyButton(){
+    document.getElementById("copy-btn").addEventListener("click", () => {
+      const colorValue = document.getElementById("color-value").textContent;
+      const textarea = document.createElement("textarea");
+      document.body.appendChild(textarea) 
+      textarea.textContent = colorValue;
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    });
   }
 
   loadAndShowColor(){
@@ -43,6 +55,7 @@ class PCCSd3Chart{
       this.showAllTonePie();
     });
   }
+
 
   highlightColor(colorName){
     if( colorName.indexOf("Gy") >= 0 ){
@@ -123,6 +136,13 @@ class PCCSd3Chart{
     .attr("id", d => "color-"+d.data.hue_tone)
     .attr("fill", d => d.data.rgb16)
     .attr("d", arc)
+    .on("click", (d) => {
+      const rgb16 = d.data.rgb16;
+      const colorValueDiv = document.getElementById("color-value");
+      colorValueDiv.textContent = rgb16;
+      colorValueDiv.style.border = `2px solid ${rgb16}`;
+      
+    })
     .attr("transform", (d,i) => {
       return `translate(${posX},${posY}) ` + `rotate(0) ` + "scale(1.0,1.0)";  
     })
